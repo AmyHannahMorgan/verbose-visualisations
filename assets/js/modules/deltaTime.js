@@ -8,16 +8,16 @@ class deltaTime {
 
     start() {
         if(this.lastCheck !== null) {
-            let now = new Date().now();
+            let now = Date.now();
             this.timeElapsed += now - this.lastCheck;
 
             if(this.timeElapsed >= this.timeInterval) {
                 this.callback();
                 this.timeElapsed = this.timeElapsed % this.timeInterval;
             }
-            this.lastCheck = new Date().now();
+            this.lastCheck = Date.now();
         }
-        else this.lastCheck = new Date().now();
+        else this.lastCheck = Date.now();
 
         window.requestAnimationFrame(() => {
             this.start();
