@@ -45,6 +45,9 @@ async function animate() {
 
         if(!sorted) {
             let swappedLines = [];
+            lines.map(() => {
+                swappedLines.push(undefined);
+            })
             for(let i = 0; i < lines.length; i++) {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 renderAllLines();
@@ -60,7 +63,7 @@ async function animate() {
                     let swap = lines[i + 1];
                     lines[i + 1] = lines[i];
                     lines[i] = swap;
-                    swappedLines.push(lines[i]);
+                    swappedLines[i] = lines[i];
                 }
 
                 await listnerPromise();
