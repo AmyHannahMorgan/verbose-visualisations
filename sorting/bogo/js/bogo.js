@@ -3,7 +3,7 @@ import {DeltaTime, deltaTimeEvent} from '/assets/js/modules/deltaTime.js'
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
 
-const dt = new DeltaTime(100, animCallback);
+const dt = new DeltaTime(1, animCallback);
 
 dt.start();
 
@@ -30,7 +30,6 @@ async function animate() {
             if(lines[i] > lines[i + 1]) {
                 ctx.strokeStyle = 'red';
                 sorted = false;
-                break;
             }
             else ctx.strokeStyle = 'green';
 
