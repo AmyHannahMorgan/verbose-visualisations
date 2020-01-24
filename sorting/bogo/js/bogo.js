@@ -3,6 +3,10 @@ import {DeltaTime, deltaTimeEvent} from '/assets/js/modules/deltaTime.js'
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
 
+const dt = new DeltaTime(100, animCallback);
+
+dt.start();
+
 const lines = [];
 
 for(let i = 0; i < canvas.width; i++) {
@@ -11,8 +15,10 @@ for(let i = 0; i < canvas.width; i++) {
 
 renderAllLines();
 
+animate();
 
 async function animate() {
+    let sorted = false;
     while(!sorted) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         renderAllLines();
@@ -33,18 +39,24 @@ async function animate() {
             await listnerPromise();
         }
 
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
         if(!sorted) {
             let sacrificalLines = [...lines];
             let newOrder = []
             while(sacrificalLines.length !== 0) {
-                newOrder.push(sacrificalLines.splice(nonInclusiveRNG(0, sacrificalLines.length)));
+                newOrder.push(sacrificalLines.splice(nonInclusiveRNG(0, sacrificalLines.length), 1));
+                highlightLines(sacrificalLines, 'red');
                 highlightLines(newOrder, 'black');
 
                 await listnerPromise();
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
             }
 
             
         }
+
+        await listnerPromise();
     }
 }
 
@@ -82,7 +94,7 @@ function animCallback() {
 }
 
 function nonInclusiveRNG(min, max) {
-    min = Math.ciel(min);
+    min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min
 }
