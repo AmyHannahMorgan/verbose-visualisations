@@ -11,6 +11,43 @@ for(let i = 0; i < canvas.width; i++) {
 
 renderAllLines();
 
+
+async function animate() {
+    while(!sorted) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        renderAllLines();
+        sorted = true;
+        for(let i = 0; i < lines.length; i++) {
+            ctx.beginPath()
+            ctx.moveTo(i, canvas.height - lines[i]);
+            ctx.lineTo(i, canvas.height);
+            if(lines[i] > lines[i + 1]) {
+                ctx.strokeStyle = 'red';
+                sorted = false;
+                break;
+            }
+            else ctx.strokeStyle = 'green';
+
+            ctx.stroke()
+
+            await listnerPromise();
+        }
+
+        if(!sorted) {
+            let sacrificalLines = [...lines];
+            let newOrder = []
+            while(sacrificalLines.length !== 0) {
+                newOrder.push(sacrificalLines.splice(nonInclusiveRNG(0, sacrificalLines.length)));
+                highlightLines(newOrder, 'black');
+
+                await listnerPromise();
+            }
+
+            
+        }
+    }
+}
+
 function renderAllLines() {
     lines.map((line, i) => {
         ctx.beginPath();
@@ -42,4 +79,10 @@ function listnerPromise() {
 
 function animCallback() {
     canvas.dispatchEvent(deltaTimeEvent);
+}
+
+function nonInclusiveRNG(min, max) {
+    min = Math.ciel(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min
 }
