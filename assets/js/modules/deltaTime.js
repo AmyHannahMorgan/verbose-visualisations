@@ -1,4 +1,4 @@
-class deltaTime {
+class DeltaTime {
     constructor(timeInterval, callback) {
         this.timeInterval = timeInterval;
         this.lastCheck = null;
@@ -25,4 +25,6 @@ class deltaTime {
     }
 }
 
-export {deltaTime};
+const deltaTimeEvent = new Event('deltaTime')
+
+export {DeltaTime, deltaTimeEvent};
