@@ -22,6 +22,15 @@ lines.map((line, i) => {
     ctx.stroke();
 });
 
+function listnerPromise() {
+    return new Promise((res, reg) => {
+        canvas.addEventListener('deltaTime', function foo() {
+            res();
+            canvas.removeEventListener('deltaTime', foo);
+        });
+    })
+}
+
 function animCallback() {
     canvas.dispatchEvent(deltaTimeEvent);
 }
