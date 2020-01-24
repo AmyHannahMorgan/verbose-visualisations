@@ -3,7 +3,7 @@ import {DeltaTime, deltaTimeEvent} from '/assets/js/modules/deltaTime.js'
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
 
-const dt = new DeltaTime(1000, animCallback);
+const dt = new DeltaTime(100, animCallback);
 
 dt.start();
 
@@ -13,26 +13,17 @@ for(let i = 0; i < canvas.width; i++) {
     lines.push(canvas.height * Math.random());
 }
 
-lines.map((line, i) => {
-    ctx.beginPath();
-    ctx.moveTo(i, canvas.height - line);
-    ctx.lineTo(i, canvas.height);
-    ctx.stroke();
-});
+renderAllLines();
 
 animate();
 
-lines.map((line, i) => {
-    ctx.beginPath();
-    ctx.moveTo(i, canvas.height - line);
-    ctx.lineTo(i, canvas.height);
-    ctx.stroke();
-});
+renderAllLines();
 
 async function animate() {
     let sorted = false;
     while(!sorted) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        renderAllLines();
         sorted = true;
         for(let i = 0; i < lines.length; i++) {
             ctx.beginPath()
@@ -48,9 +39,9 @@ async function animate() {
             ctx.stroke()
 
             await listnerPromise();
-
-            ctx.strokeStyle = 'black';
         }
+
+        ctx.strokeStyle = 'black';
 
         if(!sorted) {
             for(let i = 0; i < lines.length; i++) {
@@ -62,6 +53,15 @@ async function animate() {
             }
         }
     }
+}
+
+function renderAllLines() {
+    lines.map((line, i) => {
+        ctx.beginPath();
+        ctx.moveTo(i, canvas.height - line);
+        ctx.lineTo(i, canvas.height);
+        ctx.stroke();
+    });
 }
 
 function listnerPromise() {
