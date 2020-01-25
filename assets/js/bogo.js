@@ -1,4 +1,5 @@
-import {DeltaTime, deltaTimeEvent} from '/assets/js/modules/deltaTime.js'
+import {DeltaTime, deltaTimeEvent} from '/assets/js/modules/deltaTime.js';
+import {renderAllLines, highlightLines} from '/assets/js/modules/lineDrawing.js';
 
 const canvas = document.querySelector('#canvas');
 const ctx = canvas.getContext('2d');
@@ -13,7 +14,7 @@ for(let i = 0; i < canvas.width; i++) {
     lines.push(canvas.height * Math.random());
 }
 
-renderAllLines();
+renderAllLines(lines, ctx, canvas);
 
 animate();
 
@@ -21,7 +22,7 @@ async function animate() {
     let sorted = false;
     while(!sorted) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        renderAllLines();
+        renderAllLines(lines, ctx, canvas);
         sorted = true;
         for(let i = 0; i < lines.length; i++) {
             ctx.beginPath()
@@ -45,8 +46,8 @@ async function animate() {
             let newOrder = []
             while(sacrificalLines.length !== 0) {
                 newOrder.push(sacrificalLines.splice(nonInclusiveRNG(0, sacrificalLines.length), 1));
-                highlightLines(sacrificalLines, 'red');
-                highlightLines(newOrder, 'black');
+                highlightLines(sacrificalLines, 'red', ctx, canvas);
+                highlightLines(newOrder, 'black', ctx, canvas);
 
                 await listnerPromise();
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -57,26 +58,6 @@ async function animate() {
 
         await listnerPromise();
     }
-}
-
-function renderAllLines() {
-    lines.map((line, i) => {
-        ctx.beginPath();
-        ctx.moveTo(i, canvas.height - line);
-        ctx.lineTo(i, canvas.height);
-        ctx.stroke();
-    });
-}
-
-function highlightLines(ar, color) {
-    ctx.strokeStyle = color !== undefined ? color : 'blue';
-    ar.map((line, i) => {
-        ctx.beginPath();
-        ctx.moveTo(i, canvas.height - line);
-        ctx.lineTo(i, canvas.height);
-        ctx.stroke();
-    });
-    ctx.strokeStyle = 'black';
 }
 
 function listnerPromise() {
