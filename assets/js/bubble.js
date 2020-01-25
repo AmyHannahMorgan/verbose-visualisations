@@ -33,6 +33,7 @@ async function animate() {
             if(lines[i] > lines[i + 1]) {
                 ctx.strokeStyle = 'red';
                 sorted = false;
+                break;
             }
             else ctx.strokeStyle = 'green';
 
